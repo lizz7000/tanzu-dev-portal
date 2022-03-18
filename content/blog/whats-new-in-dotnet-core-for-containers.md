@@ -7,13 +7,10 @@ patterns:
 tags:
 - Containers
 - Microservices
-- .NET
+- ".NET"
 team:
 - Santiago Vasquez
 title: What’s New in .NET Core for Containers and Microservices
-topics:
-- Containers
-- Microservices
 ---
 
 Throughout most of my career as a developer, I have written code using .NET (mostly C#). But lately, I have been spending more time with Spring, and I keep hearing comments about exciting changes in .NET around containers. I decided it was time to go back and check out what I had missed. This article highlights some of these changes, emphasizing the ones most relevant to containers and microservices; after all, I am part of the [VMware Tanzu Portfolio](https://tanzu.vmware.com/tanzu). 
@@ -86,7 +83,7 @@ In addition to smaller runtime images, the SDK includes a tool that analyzes an 
 
 ## Faster Start-up Time by Default
 
-.NET Core 2.x had tiered compilation disabled by default. Version 3.0 enables it by default. With tiered compilation, one can opt to have the first tier compilation load precompiled code from assemblies created using the `ReadytoRun` format (more details [here](https://docs.microsoft.com/en-us/dotnet/core/whats-new/dotnet-core-3-0#readytorun-images)) ahead of time instead of just-in-time.
+.NET Core 2.x had tiered compilation deactivated by default. Version 3.0 enables it by default. With tiered compilation, one can opt to have the first tier compilation load precompiled code from assemblies created using the `ReadytoRun` format (more details [here](https://docs.microsoft.com/en-us/dotnet/core/whats-new/dotnet-core-3-0#readytorun-images)) ahead of time instead of just-in-time.
 
 To compile a project using the `ReadyToRun` format, add the `<PublishReadyToRun>` setting:
 

@@ -25,7 +25,10 @@ For changes to an already-published practice: provide the link and describe your
 - [x] Incubating: have used a few times, still rapidly evolving, has promise but unsure if generally applicable across many teams
 
 ## Resources 
+List anything here that might be helpful for writing this article.
+
 - Links to articles and blog posts
 - Links to presentations, videos, books, etc.
 
-**Note:** If these resources are not public (i.e. an internal document), provide _publicly safe information_ about how someone with the proper access would find these resources. **Do not post insecure links or non-public information here**.
+## Contribution Guide
+Please refer to the [Tanzu Practices Contrition Guide](https://github.com/vmware-tanzu/tanzu-dev-portal/wiki/Tanzu-Labs-Practices-Contribution-Guide) for detailed instructions.

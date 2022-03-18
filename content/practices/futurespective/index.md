@@ -4,7 +4,9 @@ description: Using the "sailboat" retrospective format, start from the goal to f
   ways on how to get there. Teams place themselves in the future by imagining that
   their goal has been reached. By exploring their imaginary past, teams agree how
   to work together to reach the goal.
-image: /futurespective/cover.png
+resources:
+- name: cover
+  src: images/cover.png
 lastmod: '2021-04-16'
 length: 1-2 hours
 linkTitle: Futurespective
@@ -39,6 +41,7 @@ why:
 
 ## How to Use this Method
 
+{{% section %}}
 ### Sample Agenda & Prompts
 
 1. Write or reveal the following prompt for the group: 
@@ -64,32 +67,28 @@ why:
    Ask the team to take 10 minutes to write down ways they dealt with the problems. 
 
    In other words, what can the team do today to mitigate or minimize problems that may occur in the future that could impede on achieving the goal or vision?
+{{% /section %}}
 
-#### Success/Expected Outcomes
+{{% section %}}
+### Success/Expected Outcomes
 
 You know you are done when the team has a group of positive practices and assigned actions upon at the end of the exercise.
+{{% /section %}}
 
-## Facilitator Notes & Tips
+{{% section %}}
+### Facilitator Notes & Tips
 - Use futurespective templates (Sailboat, racecar, etc.) to help the team better visualize the exercise
 - Some Futurespectives may have additional sections (example: risks that may occur which should be proactively dealt with) to further facilitate the conversation on how to achieve the goal or vision.
 - Consider discussing the difference between a retrospective and futurespective at the beginning to avoid any confusion during the exercise
 - Templates (public): [Public Trello Board with many Retrospective types, including Futurespectives.](https://metroretro.io/templates/the-sailboat-retrospective)
-   
+{{% /section %}}
 
-## Related Practices
-None at the moment.
+{{% section %}}
+### Real World Examples
+![Design Studio Example](images/example.png)
+{{% /section %}}
 
-## Variations
-None at the moment.
-
-### Preceding
-None at the moment.
- 
-### Following
-None at the moment.
-
-## Real World Examples
-![Design Studio Example](/images/practices/futurespective/example.png)
-
-## Recommended Reading
+{{% section %}}
+### Recommended Reading
 [Speed Car Futurespective Miro Template](https://metroretro.io/templates/the-speed-car-and-the-abyss)
+{{% /section %}}

@@ -1,11 +1,9 @@
 ---
 name: "Jay Ehsaniara"
 description: "Solution Architect"
-photo: "/images/team/jay-ehsaniara.png"
 roles: ["author"]
 skills: ["Java", "Kafka", "Kubernetes"]
 location: "Los Angeles, CA"
-weight: 1
 
 # Social Media
 twitter: ""
@@ -18,4 +16,4 @@ instagram: ""
 youtube: ""
 ---
 
-Jay is a Solutions Architect at VMware (Tanzu Labs). He is focused on App Modernization, Kubernetes, Event Driven and Service Mesh architecture. He has 20 years of experience in software development and architecture in various industries, including but not limited to gaming, financial, healthcare and `telematics`. 
+Jay is a Solutions Architect at VMware (Tanzu Labs). He is focused on App Modernization, Kubernetes, Event Driven and Service Mesh architecture. He has 20 years of experience in software development and architecture in various industries, including but not limited to gaming, financial, healthcare and telematics. 

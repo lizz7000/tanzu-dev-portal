@@ -1,7 +1,6 @@
 /* eslint-disable no-console */
 /* eslint-disable no-bitwise */
 const { AuthorizationCode } = require("simple-oauth2");
-const querystring = require("querystring");
 const got = require('got');
 const jwt = require('jsonwebtoken');
 
@@ -40,7 +39,8 @@ function makeAuth(clientId) {
 }
 
 function getDiscoveryUrl(params) {
-    return `${base}/authorize?${querystring.stringify(params)}`;
+    const qs = (new URLSearchParams(params)).toString();
+    return `${base}/authorize?${qs}`;
 }
 
 function getClientId() {
@@ -72,7 +72,7 @@ function randomToken() {
 async function tokenIsValid(tokenStr) {
     try {
         const req = await got.get(
-            'https://auth.esp.vmware.com/api/auth/v1/tokens/public-key',
+            base+'/tokens/public-key',
         );
         const key = JSON.parse(req.body);
         const convertKey = key.key.replace(/RSA /gi, '');

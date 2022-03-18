@@ -10,7 +10,7 @@ tags: ["Scoping", "Kickoff", "Discovery", "Framing", "Inception", "Transition", 
 length: "Short sentence regarding how many minutes, hours, or days this workshop takes"
 participants: "Who should be in this workshop? Examples include Core team, product stakeholders, designers, developers, etc."
 # custom "cover" image example: "boris/boris.png"
-image: "default-cover.png" 
+image: "cover-image.png" 
 lastmod: "{{ now.Format "2006-01-02" }}"
 date: "{{ now.Format "2006-01-02" }}"
 why: 
@@ -66,16 +66,16 @@ Things to keep in mind:
 
 1. You can embed images like this: 
 
-   ![This is the default cover image as an example](/images/practices/default-cover.png)
+   ![This is the default cover image as an example](/images/default-cover.png)
    
-   Images go in `/static/images/practices/<your-practice-folder>/the-image.png`
+   Use [page bundles](https://gohugo.io/content-management/organization/#page-bundles) for images, so they go in an `images` directory underneath the same directory that the index.md file is in.
    
    Try not to make them to large either in pixels or disk space. 1280px on the longest side and 400KB or so max. 
 
-#### Success/Expected Outcomes
+## Success/Expected Outcomes
 How do people know if this workshop was successful? 
 
-#### Facilitator Notes & Tips
+## Facilitator Notes & Tips
 Are there common ways by which this workshop gets off track? Notes like that are great for this section.
 
 ## Related Practices
@@ -84,16 +84,20 @@ If there are any related practices list them here.
 - [Related Practice 1](/practices/related-practice-1)
 - [Related Practice 2](/practices/related-practice-2)
 
-### Variations
+Delete if unused.
+
+## Variations
 Are there alternative ways of performing this practice or workshop? Call out the differences here.
 
+Delete if unused.
+
 ### Preceding
-Optional.
+Optional. Delete if unused.
 
 - [Specific practice that takes place before this one](/practices/related-practice-before)
  
 ### Following
-Optional.
+Optional. Delete if unused.
 
 - [Specific practice that takes place after one](/practices/related-practice-after)
 

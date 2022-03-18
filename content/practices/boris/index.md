@@ -2,7 +2,9 @@
 date: '2021-02-11'
 description: Identify relationships between services in a complex system to reveal
   the notional target system architecture and record them using SNAP
-image: boris/boris.png
+resources:
+- name: cover
+  src: images/boris.png
 lastmod: '2021-03-17'
 length: 1.5 hours per run; multiple runs are often needed
 participants: 'Business stakeholders, architects, technical leads, developers '
@@ -32,19 +34,21 @@ why:
 ---
 
 ## How to Use this Method
+
+{{% section %}}
 ### Sample Agenda & Prompts
 1. After [Event Storming](/practices/event-storming), using one color of sticky notes create one for each bounded context. Place on the board in a blob.
 
    {{< callout >}}
-   Tip: Create a legend identifying the bounded context, topic/queue, external system, UI.
+   **Tip**: Create a legend identifying the bounded context, topic/queue, external system, UI.
    {{< /callout >}}
 
-   ![Example of Boris legend with stickies](/images/practices/boris/legend.jpeg)
+   ![Example of Boris legend with stickies](images/legend.jpeg)
 
 1. Discuss a thin slice of the flow and map out how each of the bounded contexts communicate with one another to complete the flow. Start with the happy path then move to unhappy paths.
 
    {{< callout >}}
-   Tip: If mapping more than one slice through the system, use different colored arrows for each. From a happy path perspective, how should the “to be” bounded contexts communicate with each other? From a non-happy path perspective, how should the “to be” system communicate with each other during a failure?
+   **Tip**: If mapping more than one slice through the system, use different colored arrows for each. From a happy path perspective, how should the “to be” bounded contexts communicate with each other? From a non-happy path perspective, how should the “to be” system communicate with each other during a failure?
    {{</ callout >}}
 
    If the event message payload is discussed, push to use the smallest message possible with the least number of unique keys to identify a unique bounded context through a synchronous web service lookup (“lean events, rich APIs”)
@@ -55,7 +59,7 @@ why:
    - Should the communication be through events or web services?
    - What are some of the cross cutting integrations that need to be included (e.g. notifications, monitoring, balancing, accounting, etc)?
 
-   ![Example of Boris diagram with sync and async flows](/images/practices/boris/step-3.jpg)
+   ![Example of Boris diagram with sync and async flows](images/step-3.jpg)
 
 1. Indicate if a queue is needed by adding them in a new sticky note of the same color for a queue/topic. Add in the lines for what systems are talking to it.
 
@@ -74,7 +78,7 @@ why:
    - What backlog stories need to be created to account for the work?
    - It helps to identify someone to be in charge of recording things on the SNAP sheets so that they can grow as things come out in general conversation during Boris.
 
-   ![Example of SNAP output for a given context](/images/practices/boris/snap.jpg)
+   ![Example of SNAP output for a given context](images/snap.jpg)
 
 1. As you discuss the flow and the interactions with the system you can add information to each bounded context's sheet
 
@@ -83,17 +87,23 @@ why:
 1. Add info on the new flow to the larger bounded context sheet on a new sticky note color
 
 1. Call out specific areas that are missing on the bounded context sheets that are missing.
+{{% /section %}}
 
-#### Success/Expected Outcomes
+{{% section %}}
+### Success/Expected Outcomes
 At the end of a Boris exercise, Services, APIs, Data and Event Choreography and a backlog of work starts becoming obvious.
 
 SNAP is used to quickly document the outcomes of a Boris in real-time. Information is often grouped into APIs, Data, Pub/Sub, External Systems/UI, Stories, and Risks. The key artifact is a poster-sized sticky paper on a conference room wall or similar from a digital workspace, with one SNAP per node or service depicted on Boris. Typically there will be one SNAP per node or service depicted on Boris. Each SNAP consists of documentation about six categories: APIs, Data, External Systems/UI, Pub/Sub, Stories and Risks.
+{{% /section %}}
 
-#### Facilitator Notes & Tips
+{{% section %}}
+### Facilitator Notes & Tips
 
 Boris, [Event Storming](/practices/event-storming) and other techniques are part of the [Swift Method](/practices/swift-method) that we use for identifying the “real” problems in a large scale system and discover the North Star direction for your modernized system. Let the solution present itself through rhetorical questions. Practice a fine balance between driving to a solution vs organic evolution of the target architecture. Do not pre-optimize during the Boris exercise.
+{{% /section %}}
 
-##### Challenges Playbook
+{{% section %}}
+### Challenges Playbook
 
 ***Challenge: It isn’t clear when to move from [Event Storming](/practices/event-storming) to Boris to SNAP.***
 
@@ -122,27 +132,32 @@ See the section on who to invite in the prep work section. Aim for a real or tem
 In many ways this is true about any practice, so similar wisdom and optimization can be applied here. See the prep step on identifying facilitators and being deliberate in this process rather than expecting everyone to show up without a specific role.
 
 Also acknowledge that it will take several sessions to go through the “I do, we do, you do” process - more opportunities to facilitate can help mitigate this.
+{{% /section %}}
 
+{{% section %}}
 ## Related Practices
 
 Boris is an activity within the [Swift Method](/practices/swift-method).
+{{% /section %}}
 
+{{% section %}}
 ### Preceding
 
 [Event Storming](/practices/event-storming)
+{{% /section %}}
 
-### Following
-
-None at the moment
-
-## Real World Examples
+{{% section %}}
+### Real World Examples
 
 See the <a href="https://miro.com/app/board/o9J_kzaSk0E=/" target="_blank">Event Storming and Boris Training Miro board</a> for a detailed description of Boris and the [Swift Method](/practices/swift-method) of modernization for an Uber Eats-style application
+{{% /section %}}
 
-## Recommended Reading
+{{% section %}}
+### Recommended Reading
 
 <a href="https://www.youtube.com/watch?v=7-fRtd8LUwA" target="_blank">Swift Method: Event Storming, Boris the Spider and Other Techniques</a> (YouTube video) talk at ExploreDDD 2019 by Shaun Anderson
 
 <a href="https://www.youtube.com/watch?v=s5qeE4qii6M" target="_blank">A Deep Dive into Modernization Patterns to Get Your Mission Critical Applications to the Cloud</a> (YouTube video)
 
 <a href="https://tanzu.vmware.com/content/slides/the-modern-family-modernizing-applications-to-pivotal-cloud-foundry-getting-out-of-the-big-ball-of-mud" target="_blank">Tools to Slay the Fire Breathing Monoliths in Your Enterprise</a> (blog post)
+{{% /section %}}

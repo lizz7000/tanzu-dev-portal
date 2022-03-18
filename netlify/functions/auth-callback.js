@@ -1,7 +1,6 @@
 /* eslint-disable no-console */
 const cookie = require('cookie');
 const jwt = require('jsonwebtoken');
-const querystring = require('querystring');
 const Sentry = require('@sentry/serverless');
 
 const {
@@ -27,8 +26,8 @@ Sentry.AWSLambda.init({
 });
 
 exports.handler = Sentry.AWSLambda.wrapHandler(async (event) => {
-    // we should only get here via a reidrect from CSP, which would have
-    // an authorization code in the query string. if that's not present,
+    // we should only get here via a redirect from ESP, which would have
+    // an authorization code in the querystring. if that's not present,
     // then someone didn't follow the correct flow - bail early
     if (!event.queryStringParameters) {
         console.error('Missing query params, unauthorized');
@@ -40,7 +39,9 @@ exports.handler = Sentry.AWSLambda.wrapHandler(async (event) => {
 
     try {
         const { code, state } = event.queryStringParameters;
-        const parsed = querystring.parse(base64.urlDecode(state));
+        const urlSearchParams = new URLSearchParams(base64.urlDecode(state));
+        const parsed = Object.fromEntries(urlSearchParams.entries());
+
         const cookies = cookie.parse(event.headers.cookie);
         if (!parsed.csrf || parsed.csrf !== cookies['content-lib-csrf']) {
             console.error(
@@ -69,7 +70,7 @@ exports.handler = Sentry.AWSLambda.wrapHandler(async (event) => {
             console.error('invalid token, access denied');
             return {
                 statusCode: 401,
-                body: JSON.stringify({ error: 'CSP access denied' }),
+                body: JSON.stringify({ error: 'ESP access denied' }),
             };
         }
         const jwtToken = {
@@ -80,13 +81,15 @@ exports.handler = Sentry.AWSLambda.wrapHandler(async (event) => {
             app_metadata: {
                 authorization: {
                     // this role maps to what we've set up in our Netlify _redirects file
-                    // (for now, anyone who gets a token from CSP is considered a user)
+                    // (for now, anyone who gets a token from ESP is considered a user)
                     roles: ['user'],
                 },
             },
         };
-        const oneTrustCookieParsed = querystring.parse(cookies.OptanonConsent);
-        if (oneTrustCookieParsed){
+
+        const cookieUrlSearchParams = new URLSearchParams(cookies.OptanonConsent);
+        const oneTrustCookieParsed = Object.fromEntries(cookieUrlSearchParams.entries());
+        if (oneTrustCookieParsed && oneTrustCookieParsed.groups){
             const groupposition = oneTrustCookieParsed.groups.search('C0002:') + 6;
             if (oneTrustCookieParsed.groups[groupposition] === '0') {
                 jwtToken.id = randomToken();
@@ -102,18 +105,28 @@ exports.handler = Sentry.AWSLambda.wrapHandler(async (event) => {
             jwtToken.acct = decoded.payload.acct;
             jwtToken.sub = decoded.payload.sub;
         }
-        console.log(jwtToken);
-        const netlifyJwt = jwt.sign(jwtToken, process.env.JWT_SIGNING_SECRET, {
+
+        let jwtSecret = "secret"; // use default secret for local dev context
+        if (config.context === "production" || config.context === "deploy-preview") {
+            jwtSecret = process.env.JWT_SIGNING_SECRET;
+        }
+
+        const netlifyJwt = jwt.sign(jwtToken, jwtSecret, {
             algorithm: 'HS256',
         });
 
-        const c = cookie.serialize(netlifyCookieName, netlifyJwt, {
+        const cookieParams = {
             secure: true,
             httpOnly: false,
             path: '/',
-            domain: getSiteURL().replace('https://', ''),
-            expires: new Date(decoded.payload.exp * 1000), // same expiration as CSP token
-        });
+            expires: new Date(decoded.payload.exp * 1000), // same expiration as ESP token
+        }
+
+        if (config.context === "production" || config.context === "deploy-preview") {
+            cookieParams.domain = getSiteURL().replace('https://', '');
+        }
+
+        const c = cookie.serialize(netlifyCookieName, netlifyJwt, cookieParams);
 
         // redirect the user to where they were originally trying to get
         // with the cookie so that Netlify lets them in
@@ -121,7 +134,8 @@ exports.handler = Sentry.AWSLambda.wrapHandler(async (event) => {
             ? `${getSiteURL()}${parsed.path}?src=${parsed.referer}`
             : `${getSiteURL()}${parsed.path || ''}`;
 
-        const redirectBody = `<html><head><script>function getCookie(e){var t=document.cookie,n=e+"=",o=t.indexOf("; "+n);if(-1==o){if(0!=(o=t.indexOf(n)))return null}else{o+=2;var i=document.cookie.indexOf(";",o);-1==i&&(i=t.length)}return decodeURI(t.substring(o+n.length,i))}function setGTM(e,t,n,o,i){e[o]=e[o]||[],e[o].push({"gtm.start":(new Date).getTime(),event:"gtm.js"});var r=t.getElementsByTagName(n)[0],a=t.createElement(n),s="dataLayer"!=o?"&l="+o:"";a.async=!0,a.src="https://www.googletagmanager.com/gtm.js?id="+i+s,r.parentNode.insertBefore(a,r)}var timer;function waitForOnetrustActiveGroups(){document.cookie.indexOf("OptanonConsent")>-1&&document.cookie.indexOf("groups=")>-1?(clearTimeout(timer),setGTM(window,document,"script","dataLayer","GTM-TQ9H33K")):timer=setTimeout(waitForOnetrustActiveGroups,250)}document.cookie.indexOf("OptanonConsent")>-1&&document.cookie.indexOf("groups=")>-1?setGTM(window,document,"script","dataLayer","GTM-TQ9H33K"):waitForOnetrustActiveGroups(),dataLayer.push({event:"setUserId",userId:JSON.parse(atob(getCookie("nf_jwt").split(".")[1])).id});</script><title>Redirect</title><meta http-equiv="refresh" content="0;url=${redirect}" /></head><body></body></html>`;
+        var redirectBody = redirectTemplate.replace("REDIRECT_URL", redirect)
+        
         return {
             statusCode: 200,
             headers: {
@@ -140,3 +154,41 @@ exports.handler = Sentry.AWSLambda.wrapHandler(async (event) => {
 });
 
 
+var redirectTemplate = `<html>
+<head>
+    <script>
+        function getCookie(e) {
+            var t = document.cookie,
+                n = e + "=",
+                o = t.indexOf("; " + n);
+            if (-1 == o) {
+                if (0 != (o = t.indexOf(n))) return null;
+            } else {
+                o += 2;
+                var i = document.cookie.indexOf(";", o);
+                -1 == i && (i = t.length);
+            }
+            return decodeURI(t.substring(o + n.length, i));
+        }
+        function setGTM(e, t, n, o, i) {
+            (e[o] = e[o] || []), e[o].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+            var r = t.getElementsByTagName(n)[0],
+                a = t.createElement(n),
+                s = "dataLayer" != o ? "&l=" + o : "";
+            (a.async = !0), (a.src = "https://www.googletagmanager.com/gtm.js?id=" + i + s), r.parentNode.insertBefore(a, r);
+        }
+        var timer;
+        function waitForOnetrustActiveGroups() {
+            document.cookie.indexOf("OptanonConsent") > -1 && document.cookie.indexOf("groups=") > -1
+                ? (clearTimeout(timer), setGTM(window, document, "script", "dataLayer", "GTM-TQ9H33K"))
+                : (timer = setTimeout(waitForOnetrustActiveGroups, 250));
+        }
+        document.cookie.indexOf("OptanonConsent") > -1 && document.cookie.indexOf("groups=") > -1 ? setGTM(window, document, "script", "dataLayer", "GTM-TQ9H33K") : waitForOnetrustActiveGroups(),
+            dataLayer.push({ event: "setUserId", userId: JSON.parse(atob(getCookie("nf_jwt").split(".")[1])).id });
+    </script>
+    <title>Redirect</title>
+    <meta http-equiv="refresh" content="0;url=REDIRECT_URL" />
+</head>
+<body></body>
+</html>
+`
